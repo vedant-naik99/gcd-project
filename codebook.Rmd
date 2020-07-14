@@ -1,65 +1,27 @@
----
-title: "Codebook"
-output:
-  html_document:
-    toc: true
-    toc_depth: 4
-    toc_float: true
-    code_folding: 'hide'
-    self_contained: true
-  pdf_document:
-    toc: yes
-    toc_depth: 4
-    latex_engine: xelatex
----
+# Getting and Cleaning Data Project CodeBook
 
-Here, we're just setting a few options.
+## Data Information
 
-```{r setup}
-knitr::opts_chunk$set(
-  warning = TRUE, # show warnings during codebook generation
-  message = TRUE, # show messages during codebook generation
-  error = TRUE, # do not interrupt codebook generation in case of errors,
-                # usually better for debugging
-  echo = TRUE  # show R code
-)
-ggplot2::theme_set(ggplot2::theme_bw())
+Source Datasets can be found here [UCI ML Repository](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones) and downloaded [here](https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip).
 
-```
+The experiments have been carried out with a group of 30 volunteers within an age bracket of 19-48 years. Each person performed six activities (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING) wearing a smartphone (Samsung Galaxy S II) on the waist. Using its embedded accelerometer and gyroscope, we captured 3-axial linear acceleration and 3-axial angular velocity at a constant rate of 50Hz. The experiments have been video-recorded to label the data manually. The obtained dataset has been randomly partitioned into two sets, where 70% of the volunteers was selected for generating the training data and 30% the test data.
 
-Now, we're preparing our data for the codebook.
+The sensor signals (accelerometer and gyroscope) were pre-processed by applying noise filters and then sampled in fixed-width sliding windows of 2.56 sec and 50% overlap (128 readings/window). The sensor acceleration signal, which has gravitational and body motion components, was separated using a Butterworth low-pass filter into body acceleration and gravity. The gravitational force is assumed to have only low frequency components, therefore a filter with 0.3 Hz cutoff frequency was used. From each window, a vector of features was obtained by calculating variables from the time and frequency domain.
 
-```{r prepare_codebook}
-library(codebook)
-codebook_data <- codebook::bfi
-# to import an SPSS file from the same folder uncomment and edit the line below
-# codebook_data <- rio::import("mydata.sav")
-# for Stata
-# codebook_data <- rio::import("mydata.dta")
-# for CSV
-# codebook_data <- rio::import("mydata.csv")
+## Attribute Information
 
-# omit the following lines, if your missing values are already properly labelled
-codebook_data <- detect_missing(codebook_data,
-    only_labelled = TRUE, # only labelled values are autodetected as
-                                   # missing
-    negative_values_are_missing = FALSE, # negative values are missing values
-    ninety_nine_problems = TRUE,   # 99/999 are missing values, if they
-                                   # are more than 5 MAD from the median
-    )
+For each record in the dataset it is provided:
+- Triaxial acceleration from the accelerometer (total acceleration) and the estimated body acceleration.
+- Triaxial Angular velocity from the gyroscope.
+- A 561-feature vector with time and frequency domain variables.
+- Its activity label.
+- An identifier of the subject who carried out the experiment.
 
-# If you are not using formr, the codebook package needs to guess which items
-# form a scale. The following line finds item aggregates with names like this:
-# scale = scale_1 + scale_2R + scale_3R
-# identifying these aggregates allows the codebook function to
-# automatically compute reliabilities.
-# However, it will not reverse items automatically.
-codebook_data <- detect_scales(codebook_data)
-```
+## Data Manipulation
 
+Datasets have been merged in a way to work on a tidy dataset of both test and train subjects data
+More info are available in the README.md file.
 
-Create codebook
+## Variables 
 
-```{r codebook}
-codebook(codebook_data)
-```
+The resulting dataset provides the average of each variable for each activity and each subject. Variables are features for which the file features.txt provides a description. For each subject (IDs from 1 to 30), recorded data are given for each activity (Walking, Standing, ...).
